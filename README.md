@@ -75,8 +75,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Contact
 
-- Your Name – your.email@example.com  
-- GitHub: [yourusername](https://github.com/yourusername)
+- Your Name – eshwarrao024@gmail.com  
+- GitHub: [EshwarraoR](https://github.com/EshwarraoR)
 
 ---
 
