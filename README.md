@@ -40,7 +40,6 @@ A modern, dynamic Weather Dashboard web application that provides real-time loca
 
 2. Navigate to the project directory: cd weather-dashboard
 
-3. 
 3. Open `script.js` and replace 
 
 const apiKey = 'YOUR_OPENWEATHERMAP_API_KEY';
