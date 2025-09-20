@@ -75,7 +75,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Contact
 
-- Your Name – eshwar rao  
+- Name – eshwar rao
+- email - eshwarrao024@gmail.com 
 - GitHub: [EshwarraoR](https://github.com/EshwarraoR)
 
 ---
