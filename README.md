@@ -22,7 +22,6 @@ A modern, dynamic Weather Dashboard web application that provides real-time loca
 - JavaScript (ES6+)
 - OpenWeatherMap API (Weather data and Geocoding)
 - Browser Geolocation API
-- Awesomplete library for autocomplete
 
 ---
 
@@ -55,8 +54,8 @@ with your actual API key.
 ## Usage
 
 - Click **Use My Location** to get the weather for your current location.
-- Start typing a city name in the search box; autocomplete suggestions will appear.
-- Select a city from the suggestions or type a full city name and press **Enter** or click **Search** to get weather details.
+- Start typing a city name in the search box 
+- type a full city name and press **Enter** or click **Search** to get weather details.
 - View current weather and hourly forecast in a clean, responsive format.
   
 ---
