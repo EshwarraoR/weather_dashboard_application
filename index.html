@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeatherView</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="dashboard">
     <h1>Weather Dashboard</h1>
     <button id="locateBtn">Use My Location</button>
-    <input type="text" id="cityInput" placeholder="Search city..." spellcheck="false">
+    <select id="favoritesDropdown">
+      <option value="">-- Favorites --</option>
+    </select>
+    <input type="text" id="cityInput" placeholder="Search city..." spellcheck="false" autocomplete="off" />
+    <button id="saveFavoriteBtn">Save Favorite</button>
+    <button id="deleteFavoriteBtn">Delete Favorite</button>
     <button id="searchBtn">Search</button>
 
+    <div id="alertsBox" class="weather-alerts"></div>
     <div id="weatherDisplay" class="weather-box"></div>
+    <div id="suggestionsBox" class="weather-suggestions"></div>
     <div id="forecastDisplay" class="forecast-row"></div>
   </div>
   <script src="script.js"></script>

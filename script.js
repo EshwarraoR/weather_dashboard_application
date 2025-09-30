@@ -1,72 +1,99 @@
-const apiKey = '013f929c506f92a79c337c5837694c2f'; // Replace this!
+const apiKey = '013f929c506f92a79c337c5837694c2f'; // api key from openweathermap
 
-// Elements
+// DOM elements
 const weatherBox = document.getElementById('weatherDisplay');
 const forecastRow = document.getElementById('forecastDisplay');
 const locateBtn = document.getElementById('locateBtn');
 const searchBtn = document.getElementById('searchBtn');
 const cityInput = document.getElementById('cityInput');
+const alertsBox = document.getElementById('alertsBox');
+const suggestionsBox = document.getElementById('suggestionsBox');
+const favoritesDropdown = document.getElementById('favoritesDropdown');
+const saveFavoriteBtn = document.getElementById('saveFavoriteBtn');
+const deleteFavoriteBtn = document.getElementById('deleteFavoriteBtn');
 
-// Helpers
+// Convert temperature from Kelvin to Celsius
 function kelvinToC(tempK) {
   return Math.round(tempK - 273.15) + "°C";
 }
 
-function formatDate(dt, timezoneOffsetS) {
+// Format Unix timestamp to readable date string with AM/PM format and timezone offset
+function formatDate(dt, timezoneOffsetS = 0) {
   const date = new Date((dt + timezoneOffsetS) * 1000);
-  return date.toLocaleString(undefined, {weekday: 'short', hour: '2-digit',minute: '2-digit', hour12: true});
+  return date.toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
 }
 
-// Fetch current weather by coordinates
+// Fetch weather data by geographic coordinates (latitude and longitude)
 async function fetchWeatherByCoords(lat, lon) {
-  weatherBox.innerHTML = 'Loading...';
+  // Reset UI elements while loading
+  weatherBox.textContent = 'Loading...';
   forecastRow.innerHTML = '';
+  alertsBox.innerHTML = '';
+  suggestionsBox.innerHTML = '';
+  
+  // API URLs for current weather, one call (for alerts and suggestions), and forecast data
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+  const oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${apiKey}`;
   const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-
+  
   try {
-    // Current
-    const res = await fetch(url);
-    const data = await res.json();
+    // Fetch data concurrently
+    const [weatherRes, oneCallRes, forecastRes] = await Promise.all([
+      fetch(url),
+      fetch(oneCallUrl),
+      fetch(forecastUrl)
+    ]);
+    
+    // Parse JSON responses
+    const weatherData = await weatherRes.json();
+    const oneCallData = await oneCallRes.json();
+    const forecastData = await forecastRes.json();
 
-    // Forecast (3-hour steps, 5 days)
-    const foreRes = await fetch(forecastUrl);
-    const foreData = await foreRes.json();
+    // Update UI with obtained data
+    showWeather(weatherData);
+    showForecast(forecastData);
+    showAlerts(oneCallData);
+    showSuggestions(oneCallData);
 
-    showWeather(data);
-    showForecast(foreData);
   } catch (err) {
-    weatherBox.innerHTML = 'Failed to fetch weather.';
-  }
-}
-
-// Fetch current weather by city name
-async function fetchWeatherByCity(city) {
-  weatherBox.innerHTML = 'Loading...';
-  forecastRow.innerHTML = '';
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}`;
-  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}`;
-  try {
-    // Current
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('City not found');
-    const data = await res.json();
-
-    // Forecast
-    const foreRes = await fetch(forecastUrl);
-    const foreData = await foreRes.json();
-
-    showWeather(data);
-    showForecast(foreData);
-  } catch (err) {
-    weatherBox.innerHTML = 'Not found. Check city name or try again.';
+    // Error handling
+    weatherBox.textContent = 'Failed to fetch weather.';
     forecastRow.innerHTML = '';
+    alertsBox.innerHTML = '';
+    suggestionsBox.innerHTML = '';
   }
 }
 
-// UI updates
+// Fetch weather data by city name (uses geocoding API to get coordinates first)
+async function fetchWeatherByCity(city) {
+  // Reset UI elements while loading
+  weatherBox.textContent = 'Loading...';
+  forecastRow.innerHTML = '';
+  alertsBox.innerHTML = '';
+  suggestionsBox.innerHTML = '';
+
+  // Geocoding API URL to resolve city name to lat/lon
+  const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${apiKey}`;
+  try {
+    const geoRes = await fetch(geoUrl);
+    const geoData = await geoRes.json();
+
+    if (!geoData[0]) throw new Error('City not found');
+
+    const { lat, lon } = geoData[0];
+    // Fetch weather data with obtained coordinates
+    await fetchWeatherByCoords(lat, lon);
+  } catch (err) {
+    // Show error message if city not found or other errors
+    weatherBox.textContent = 'Not found. Check city name or try again.';
+    forecastRow.innerHTML = '';
+    alertsBox.innerHTML = '';
+    suggestionsBox.innerHTML = '';
+  }
+}
+
+// Display current weather info in UI
 function showWeather(data) {
-  // Safely extract weather info with defaults
   const w = (Array.isArray(data.weather) && data.weather[0]) ? data.weather[0] : {};
   const iconUrl = w.icon ? `https://openweathermap.org/img/wn/${w.icon}@2x.png` : '';
   const city = data.name || 'Unknown';
@@ -87,20 +114,20 @@ function showWeather(data) {
   `;
 }
 
+// Display forecast for next 24 hours in 3-hour intervals
 function showForecast(foreData) {
   forecastRow.innerHTML = '';
+  
+  // Validate forecast data
   if (!foreData.list || !Array.isArray(foreData.list)) {
-    forecastRow.innerHTML = '<div class="forecast-card">No forecast data available.</div>';
+    forecastRow.innerHTML = `<div class="forecast-card">No forecast data available.</div>`;
     return;
   }
-
-  const nowUnix = Math.floor(Date.now() / 1000); // current time in seconds
-
-  // Find the first forecast index equal or after current time
+  
+  const nowUnix = Math.floor(Date.now() / 1000);
   const startIndex = foreData.list.findIndex(f => f.dt >= nowUnix);
   const sliceStart = startIndex >= 0 ? startIndex : 0;
-
-  // take next 8 forecast entries from current time (24 hours)
+  // Get 8 slots (3-hour intervals) for 24 hours forecast
   const forecastSlice = foreData.list.slice(sliceStart, sliceStart + 8);
 
   forecastSlice.forEach(f => {
@@ -114,7 +141,7 @@ function showForecast(foreData) {
     forecastRow.innerHTML += `
       <div class="forecast-card">
         <div>${dateLabel}</div>
-        ${iconUrl ? `<img src="${iconUrl}" alt="${desc}" />` : ""}
+        ${iconUrl ? `<img src="${iconUrl}" alt="${desc}" />` : ''}
         <div>${temp}</div>
         <div>${main} - ${desc}</div>
       </div>
@@ -122,25 +149,108 @@ function showForecast(foreData) {
   });
 }
 
+// Display any severe weather alerts using One Call API data
+function showAlerts(data) {
+  if (data.alerts && data.alerts.length > 0) {
+    let alertText = '';
+    data.alerts.forEach(a => {
+      alertText += `<strong>${a.event}</strong>: ${a.description}<br/>`;
+    });
+    alertsBox.innerHTML = alertText;
+    alertsBox.style.display = "block";
+  } else {
+    alertsBox.innerHTML = '';
+    alertsBox.style.display = "none";
+  }
+}
 
+// Show weather-based suggestions to users depending on conditions
+function showSuggestions(oneCallData) {
+  if (!oneCallData.current) {
+    suggestionsBox.innerHTML = '';
+    return;
+  }
+  const weatherId = oneCallData.current.weather[0].id;
+  const tempC = oneCallData.current.temp - 273.15;
+  const uvIndex = oneCallData.current.uvi || 0;
+  const rain = oneCallData.current.rain ? oneCallData.current.rain['1h'] : 0;
+  const snow = oneCallData.current.snow ? oneCallData.current.snow['1h'] : 0;
 
-// Location button
+  const messages = [];
+
+  // Determine suggestions
+  if (rain > 0 || snow > 0 || (weatherId >= 200 && weatherId < 700)) {
+    messages.push('🌧️ Carry an umbrella!');
+  }
+  if (tempC > 30) {
+    messages.push('🔥 It\'s hot! Stay hydrated and wear sunscreen.');
+  } else if (tempC >= 20 && tempC <= 30) {
+    messages.push('🙂 Nice weather! Perfect for outdoor activities.');
+  } else if (tempC < 10) {
+    messages.push('🧥 It\'s chilly! Dress warmly.');
+  }
+  if (uvIndex >= 6) {
+    messages.push('☀️ High UV index! Use sunscreen.');
+  }
+  if (messages.length === 0) {
+    messages.push('🙂 Great weather! Enjoy your day.');
+  }
+  suggestionsBox.innerHTML = messages.join('<br/>');
+}
+
+// Save a city to favorites dropdown if not already added
+saveFavoriteBtn.onclick = function() {
+  const city = cityInput.value.trim();
+  if (city && !Array.from(favoritesDropdown.options).some(opt => opt.value === city)) {
+    const option = document.createElement('option');
+    option.value = city;
+    option.innerText = city;
+    favoritesDropdown.appendChild(option);
+  }
+};
+
+// Delete the selected city from favorites dropdown
+deleteFavoriteBtn.onclick = function() {
+  const selectedCity = favoritesDropdown.value;
+  if (selectedCity && selectedCity !== '') {
+    for (let i = 0; i < favoritesDropdown.options.length; i++) {
+      if (favoritesDropdown.options[i].value === selectedCity) {
+        favoritesDropdown.remove(i);
+        break;
+      }
+    }
+    // Clear city input if matches deleted city
+    if (cityInput.value === selectedCity) {
+      cityInput.value = '';
+    }
+  }
+};
+
+// On favorites dropdown change, fetch city weather immediately
+favoritesDropdown.onchange = function() {
+  cityInput.value = this.value;
+  if (this.value) fetchWeatherByCity(this.value);
+};
+
+// Use browser geolocation to get user location weather
 locateBtn.onclick = () => {
   if (!navigator.geolocation) {
-    weatherBox.innerHTML = "Geolocation is not supported.";
+    weatherBox.textContent = "Geolocation not supported.";
     return;
   }
   navigator.geolocation.getCurrentPosition(
     pos => fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
-    err => weatherBox.innerHTML = "Permission denied or location error."
+    err => weatherBox.textContent = "Permission denied or location error."
   );
 };
 
-// Search button
+// Search button click triggers city-based weather search
 searchBtn.onclick = () => {
   const val = cityInput.value.trim();
   if (val) fetchWeatherByCity(val);
 };
+
+// Pressing Enter in city input triggers search as well
 cityInput.addEventListener('keydown', function(event) {
   if (event.key === 'Enter') {
     const val = cityInput.value.trim();
@@ -148,11 +258,5 @@ cityInput.addEventListener('keydown', function(event) {
   }
 });
 
-const cityDropdown = document.getElementById('cityDropdown');
-cityDropdown.addEventListener('change', function() {
-  cityInput.value = cityDropdown.value;
-});
-
-
-// Auto-load by location on page load
+// On page load, trigger location based weather fetch automatically
 window.onload = () => locateBtn.onclick();
