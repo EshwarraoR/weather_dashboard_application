@@ -6,12 +6,21 @@ A modern, dynamic Weather Dashboard web application that provides real-time loca
 
 ## Features
 
-- **Real-time Weather:** Automatically detect user location and display current weather conditions.
-- **City Search:** Search weather by any city worldwide, with smart autocomplete powered by OpenWeatherMap’s Geocoding API.
-- **24-Hour Forecast:** Hourly forecast starting from the current time, shown in user-friendly AM/PM format.
-- **Attractive Design:** Modern UI with glassmorphism, animated backgrounds, and responsive layout.
-- **Keyboard Friendly:** Press Enter to search and navigate autocomplete suggestions.
-- **Error Handling:** Handles undefined or missing data gracefully.
+- Real-time Location Weather: Detect the user's location using the browser Geolocation API and display current weather data.
+
+- City Search with Autocomplete: Search weather by city name with instant autocomplete suggestions.
+
+- Multiple Favorites: Save and manage multiple favorite cities, with support for adding and deleting favorites.
+
+- 24-hour Hourly Forecast: View detailed 3-hour interval weather forecasts for the next 24 hours.
+
+- Severe Weather Alerts: Receive live notifications of weather warnings and hazards for your location or searched city.
+
+- Weather-based Suggestions: Helpful daily tips such as "Carry an umbrella" or "Use sunscreen" based on live weather conditions.
+
+- Responsive and Attractive UI: Beautiful modern design with glassmorphism style and smooth animated background.
+
+- Keyboard Friendly: Supports Enter key search and easy navigation between favorite locations.
 
 ---
 
@@ -55,15 +64,18 @@ with your actual API key.
 
 - Click **Use My Location** to get the weather for your current location.
 - Start typing a city name in the search box 
-- type a full city name and press **Enter** or click **Search** to get weather details.
-- View current weather and hourly forecast in a clean, responsive format.
+- Save your favorite cities for quick access with Save Favorite button.
+- Remove favorites you no longer want with the Delete Favorite button.
+- View current conditions, hourly forecast, weather alerts and tips updated dynamically.
   
 ---
 
-## Contributing
-
-Contributions are welcome! Feel free to submit issues or pull requests to enhance the app, add features, or improve usability and design.
-
+**Future Enhancements**
+- Add multi-language support and unit toggles (°C / °F)
+- Integrate weather radar or map visualizations
+- Push notifications for alerts and daily weather summaries
+- Allow saving favorites persistently using localStorage or backend
+- Add calendar or travel integrations for smart planning
 ---
 
 ## License
@@ -80,5 +92,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-Enjoy planning your day better with live, intuitive weather updates!
-
+Enjoy planning your day better with this handy real-time Weather Dashboard!
