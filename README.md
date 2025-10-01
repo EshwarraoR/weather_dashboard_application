@@ -14,10 +14,6 @@ A modern, dynamic Weather Dashboard web application that provides real-time loca
 
 - 24-hour Hourly Forecast: View detailed 3-hour interval weather forecasts for the next 24 hours.
 
-- Severe Weather Alerts: Receive live notifications of weather warnings and hazards for your location or searched city.
-
-- Weather-based Suggestions: Helpful daily tips such as "Carry an umbrella" or "Use sunscreen" based on live weather conditions.
-
 - Responsive and Attractive UI: Beautiful modern design with glassmorphism style and smooth animated background.
 
 - Keyboard Friendly: Supports Enter key search and easy navigation between favorite locations.
@@ -66,7 +62,7 @@ with your actual API key.
 - Start typing a city name in the search box 
 - Save your favorite cities for quick access with Save Favorite button.
 - Remove favorites you no longer want with the Delete Favorite button.
-- View current conditions, hourly forecast, weather alerts and tips updated dynamically.
+- View current conditions, 3 hour interval forecast for next 24hours.
   
 ---
 
