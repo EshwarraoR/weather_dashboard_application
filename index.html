@@ -10,16 +10,16 @@
   <main class="dashboard" role="main" aria-label="Weather Dashboard Application">
     <h1>Weather Dashboard</h1>
     <form class="controls" autocomplete="off" onsubmit="return false;">
-      <button id="locateBtn" type="button" aria-label="Get weather for current location">Use My Location</button>
-      <select id="favoritesDropdown" aria-label="Select favorite city">
+      <button id="locateBtn" type="button" aria-label="Fetch weather for current location">Use My Location</button>
+      <select id="favoritesDropdown" aria-label="Select favorite city"> 
         <option value="">-- Favorites --</option>
       </select>
-      <input
-        id="cityInput"
-        type="text"
-        placeholder="Search city..."
-        spellcheck="false"
-        autocomplete="off"
+      <input 
+        id="cityInput" 
+        type="text" 
+        placeholder="Search city..." 
+        spellcheck="false" 
+        autocomplete="off" 
         aria-label="Enter city name to search weather"
       />
       <div class="search-buttons">
@@ -28,13 +28,15 @@
       </div>
       <button id="searchBtn" type="button" aria-label="Search weather for entered city">Search</button>
     </form>
+
     <section class="messages" aria-live="polite" aria-atomic="true">
-      <div id="alertsBox" class="weather-alerts" role="alert" aria-hidden="true"></div>
-      <div id="suggestionsBox" class="weather-suggestions" aria-hidden="true"></div>
       <div id="errorBox" class="weather-error" aria-hidden="true"></div>
+      <div id="alertsBox" class="weather-alerts" aria-hidden="true"></div>
     </section>
-    <section id="weatherDisplay" class="weather-box" aria-label="Current weather information"></section>
-    <section id="forecastDisplay" class="forecast-row" aria-label="24-hour weather forecast, 3-hourly intervals" tabindex="0"></section>
+
+    <section id="weatherDisplay" class="weather-box" aria-label="Current weather data"></section>
+
+    <section id="forecastDisplay" class="forecast-row" aria-label="5 day forecast, 3 hourly intervals"></section>
   </main>
   <script src="script.js"></script>
 </body>

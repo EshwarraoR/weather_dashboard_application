@@ -3,18 +3,16 @@
 body {
   font-family: 'Montserrat', Arial, sans-serif;
   background: linear-gradient(135deg, #5f76fb 0%, #56fcda 100%);
-  margin: 0;
-  padding: 0;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
 }
-
 .dashboard {
   background: rgba(255,255,255,0.22);
-  box-shadow: 0 10px 32px 4px rgba(50,100,250,0.18);
-  border-radius: 34px;
+  box-shadow: 0 10px 32px 4px rgba(50,100,250,0.14);
+  border-radius: 28px;
   backdrop-filter: blur(12px);
   width: 96vw;
   max-width: 420px;
@@ -24,47 +22,47 @@ body {
   border: 2px solid rgba(255,255,255,0.22);
   margin: 20px 0;
 }
-
 h1 {
   font-size: 2.1em;
-  font-weight: bold;
   color: #142385;
-  letter-spacing: 2px;
   margin-bottom: 18px;
+  font-weight: bold;
+  letter-spacing: 2px;
   text-shadow: 0 3px 18px rgba(70,100,255,0.12);
-  user-select: none;
+}
+.controls > * {
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.controls {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+#cityInput {
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  position: static;
 }
 
-input[type="text"],
-select,
-button {
+input[type="text"], select, button {
   width: 100%;
   padding: 15px 16px;
   border-radius: 14px;
   border: none;
   outline: none;
-  box-sizing: border-box;
   font-size: 1.09em;
   font-family: inherit;
   font-weight: 600;
   margin-bottom: 4px;
   background: rgba(255,255,255,0.36);
   color: #2639a6;
-  box-shadow: 0 2px 10px rgba(130,130,245,0.08);
+  box-shadow: 0 2px 10px rgba(130,130,245,0.07);
   transition: all 0.22s cubic-bezier(.8, .2, .2, 1);
 }
-
 input[type="text"]::placeholder {
   color: #6d90e3;
-  opacity: 1;
 }
-
 button {
   background: linear-gradient(135deg, #438FFB 0%, #49FCD9 100%);
   color: #fff;
@@ -77,47 +75,32 @@ button:hover {
   color: #2639a6;
   transform: scale(1.04);
 }
-
 .search-buttons {
   display: flex;
   gap: 6px;
 }
-
-.weather-alerts {
+.weather-error {
+  background: #fbe8ea;
+  color: #b00808;
+  border-radius: 10px;
+  padding: 11px 15px;
   margin: 13px 0;
+  font-weight: 700;
+  font-size: 1.08em;
+  box-shadow: 0 2px 12px rgba(180,30,88,0.11);
+  display: none;
+}
+.weather-alerts {
+  margin: 8px 0;
   background: #ffeded;
   color: #a90808;
   border-radius: 10px;
   padding: 10px 14px;
   font-weight: 700;
-  word-wrap: break-word;
   font-size: 1em;
+  box-shadow: 0 2px 8px #d48ca05b;
   display: none;
 }
-.weather-suggestions {
-  margin: 11px 0;
-  background: #f1f7ff;
-  color: #22709a;
-  border-radius: 8px;
-  padding: 9px 10px;
-  font-weight: 600;
-  font-style: italic;
-  font-size: 1em;
-  word-wrap: break-word;
-  display: none;
-}
-.weather-error {
-  margin: 13px 0;
-  background: #feebed;
-  color: #a90808;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-weight: 700;
-  font-size: 1.08em;
-  word-wrap: break-word;
-  display: none;
-}
-
 .weather-box {
   background: rgba(240,242,255,0.6);
   border-radius: 24px;
@@ -128,48 +111,42 @@ button:hover {
   font-size: 1em;
   box-shadow: 0 4px 18px rgba(110,180,250,0.13);
 }
-
 .weather-box h2 {
   color: #274180;
   font-size: 1.15em;
   margin-bottom: 10px;
 }
-
 .weather-box img {
   width: 56px;
   height: 56px;
   margin-top: 6px;
   filter: drop-shadow(0 6px 9px #76bfff44);
 }
-
 .forecast-row {
   display: flex;
   gap: 11px;
-  margin-top: 16px;
+  margin-top: 18px;
   overflow-x: auto;
   padding-bottom: 11px;
   justify-content: flex-start;
   scroll-behavior: smooth;
   box-sizing: border-box;
 }
-
 .forecast-card {
   background: rgba(255,255,255,0.44);
   border-radius: 17px;
   min-width: 86px;
   box-shadow: 0 3px 10px rgba(70,201,250,0.14);
-  padding: 13px 3px;
+  padding: 13px 5px;
   font-size: 15px;
   color: #25577c;
   font-weight: 600;
   text-align: center;
   border: 1.1px solid #ecf0f7;
-  position: relative;
 }
-
 .forecast-card img {
-  width: 30px;
-  height: 30px;
+  width: 27px;
+  height: 27px;
   margin-top: 3px;
   filter: drop-shadow(0 6px 9px #76bfff44);
 }
