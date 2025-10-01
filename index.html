@@ -2,26 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Weather Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="dashboard">
+  <main class="dashboard" role="main" aria-label="Weather Dashboard Application">
     <h1>Weather Dashboard</h1>
-    <button id="locateBtn">Use My Location</button>
-    <select id="favoritesDropdown">
-      <option value="">-- Favorites --</option>
-    </select>
-    <input type="text" id="cityInput" placeholder="Search city..." spellcheck="false" autocomplete="off" />
-    <button id="saveFavoriteBtn">Save Favorite</button>
-    <button id="deleteFavoriteBtn">Delete Favorite</button>
-    <button id="searchBtn">Search</button>
-
-    <div id="alertsBox" class="weather-alerts"></div>
-    <div id="weatherDisplay" class="weather-box"></div>
-    <div id="suggestionsBox" class="weather-suggestions"></div>
-    <div id="forecastDisplay" class="forecast-row"></div>
-  </div>
+    <form class="controls" autocomplete="off" onsubmit="return false;">
+      <button id="locateBtn" type="button" aria-label="Get weather for current location">Use My Location</button>
+      <select id="favoritesDropdown" aria-label="Select favorite city">
+        <option value="">-- Favorites --</option>
+      </select>
+      <input
+        id="cityInput"
+        type="text"
+        placeholder="Search city..."
+        spellcheck="false"
+        autocomplete="off"
+        aria-label="Enter city name to search weather"
+      />
+      <div class="search-buttons">
+        <button id="saveFavoriteBtn" type="button" aria-label="Save city as favorite">Save Favorite</button>
+        <button id="deleteFavoriteBtn" type="button" aria-label="Delete selected favorite city">Delete Favorite</button>
+      </div>
+      <button id="searchBtn" type="button" aria-label="Search weather for entered city">Search</button>
+    </form>
+    <section class="messages" aria-live="polite" aria-atomic="true">
+      <div id="alertsBox" class="weather-alerts" role="alert" aria-hidden="true"></div>
+      <div id="suggestionsBox" class="weather-suggestions" aria-hidden="true"></div>
+      <div id="errorBox" class="weather-error" aria-hidden="true"></div>
+    </section>
+    <section id="weatherDisplay" class="weather-box" aria-label="Current weather information"></section>
+    <section id="forecastDisplay" class="forecast-row" aria-label="24-hour weather forecast, 3-hourly intervals" tabindex="0"></section>
+  </main>
   <script src="script.js"></script>
 </body>
 </html>
